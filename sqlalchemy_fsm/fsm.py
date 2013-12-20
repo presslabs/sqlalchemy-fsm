@@ -17,7 +17,7 @@ class FSMMeta(object):
             raise TypeError('More than one FSMField found in model')
         else:
             return fsm_fields[0]
-    
+
     @staticmethod
     def current_state(instance):
         field_name = FSMMeta._get_state_field(instance).name
@@ -44,34 +44,6 @@ class FSMMeta(object):
             next_state = self.transitions['*']
         setattr(instance, field_name, next_state)
 
-def transition(source = '*', target = None, conditions = ()):
-    def inner_transition(func):
-        if not hasattr(func, '_sa_fsm'):
-            setattr(func, '_sa_fsm', FSMMeta())
-        if isinstance(source, collections.Sequence) and not\
-                isinstance(source, basestring):
-            for state in source:
-                func._sa_fsm.transitions[state] = target
-        else:
-            func._sa_fsm.transitions[source] = target
-        func._sa_fsm.conditions[target] = conditions
-
-        @wraps(func)
-        def _change_state(instance, *args, **kwargs):
-            meta = func._sa_fsm
-            if not meta.has_transition(instance):
-                raise NotImplementedError('Cant switch from %s using method %s'\
-                        % (FSMMeta.current_state(instance), func.func_name))
-            for condition in conditions:
-                if not condition(instance, *args, **kwargs):
-                    return False
-            func(instance, *args, **kwargs)
-            meta.to_next_state(instance)
-        return _change_state
-    if not target:
-        raise ValueError('Result state not specified')
-    return inner_transition
-
 def can_proceed(bound_method, *args, **kwargs):
     if not hasattr(bound_method, '_sa_fsm'):
         raise NotImplementedError('%s method is not transition' %\
@@ -82,4 +54,3 @@ def can_proceed(bound_method, *args, **kwargs):
 
 class FSMField(SAtypes.String):
     pass
-

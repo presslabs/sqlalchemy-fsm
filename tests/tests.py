@@ -1,4 +1,5 @@
 import unittest, sqlalchemy
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_fsm import FSMField, transition, can_proceed
