@@ -30,5 +30,3 @@ def transition(source = '*', target = None, conditions = ()):
     if not target:
         raise ValueError('Result state not specified')
     return inner_transition
-
-
