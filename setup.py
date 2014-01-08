@@ -7,7 +7,7 @@ requires_list = [
 ]
 
 setup(name='sqlalchemy_fsm',
-      version='0.0.1',
+      version='0.0.2',
       platforms='any',
       description='FSM implementation for sqlalchemy',
       author='dagoof',
