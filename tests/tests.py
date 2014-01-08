@@ -3,6 +3,7 @@ import unittest, sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_fsm import FSMField, transition, can_proceed
+from sqlalchemy_fsm.exceptions import InvalidTransition
 
 engine = sqlalchemy.create_engine('sqlite:///:memory:', echo = True)
 session = sessionmaker(bind = engine)
@@ -10,6 +11,7 @@ Base = declarative_base()
 
 class BlogPost(Base):
   __tablename__ = 'blogpost'
+
   id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
   state = sqlalchemy.Column(FSMField)
 
@@ -55,7 +57,7 @@ class FSMFieldTest(unittest.TestCase):
 
   def test_unknow_transition_fails(self):
     self.assertFalse(can_proceed(self.model.hide))
-    self.assertRaises(NotImplementedError, self.model.hide)
+    self.assertRaises(InvalidTransition, self.model.hide)
 
   def test_state_non_changed_after_fail(self):
     self.assertRaises(Exception, self.model.remove)

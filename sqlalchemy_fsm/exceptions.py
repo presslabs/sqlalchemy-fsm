@@ -1,0 +1,2 @@
+class InvalidTransition(BaseException):
+  pass

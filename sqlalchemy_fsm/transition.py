@@ -2,6 +2,7 @@ import collections
 from functools import wraps
 
 from sqlalchemy_fsm import FSMMeta
+from sqlalchemy_fsm.exceptions import InvalidTransition
 
 def transition(source = '*', target = None, conditions = ()):
   def inner_transition(func):
@@ -21,7 +22,7 @@ def transition(source = '*', target = None, conditions = ()):
       meta = func._sa_fsm
 
       if not meta.has_transition(instance):
-        raise NotImplementedError('Cant switch from %s using method %s'\
+        raise InvalidTransition('Cant switch from %s using method %s'\
                             % (FSMMeta.current_state(instance), func.func_name))
 
       for condition in conditions:
