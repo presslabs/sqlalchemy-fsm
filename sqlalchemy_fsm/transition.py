@@ -7,9 +7,12 @@ from sqlalchemy_fsm.exceptions import InvalidTransition
 def transition(source = '*', target = None, conditions = ()):
   def inner_transition(func):
 
+    def isstring(candidate):
+      return isinstance(candidate, (''.__class__, u''.__class__))
+
     if not hasattr(func, '_sa_fsm'):
       setattr(func, '_sa_fsm', FSMMeta())
-    if isinstance(source, collections.Sequence) and not isinstance(source, basestring):
+    if isinstance(source, collections.Sequence) and not isstring(source):
       for state in source:
         func._sa_fsm.transitions[state] = target
     else:
@@ -23,7 +26,7 @@ def transition(source = '*', target = None, conditions = ()):
 
       if not meta.has_transition(instance):
         raise InvalidTransition('Cant switch from %s using method %s'\
-                            % (FSMMeta.current_state(instance), func.func_name))
+                            % (FSMMeta.current_state(instance), func.__name__))
 
       for condition in conditions:
         if not condition(instance, *args, **kwargs): return False
