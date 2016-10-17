@@ -1,9 +1,8 @@
 from setuptools import setup, find_packages
 
 requires_list = [
-  'SQLAlchemy==0.8.4',
-  'argparse==1.2.1',
-  'wsgiref==0.1.2',
+  'SQLAlchemy==1.1.1',
+  'argparse==1.4.0',
 ]
 
 setup(name='sqlalchemy_fsm',
@@ -16,6 +15,6 @@ setup(name='sqlalchemy_fsm',
       include_package_data=True,
       install_requires=requires_list,
       classifiers = [
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
       ]
 )
