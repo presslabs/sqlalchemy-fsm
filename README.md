@@ -14,6 +14,7 @@ Usage
 -----
 
 Add FSMState field to you model
+
     from sqlalchemy_fsm import FSMField, transition
 
     class BlogPost(db.Model):
