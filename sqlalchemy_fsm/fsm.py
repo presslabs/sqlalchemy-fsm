@@ -26,12 +26,12 @@ class FSMMeta(object):
     return getattr(instance, field_name)
 
   def has_transition(self, instance):
-    return self.transitions.has_key(FSMMeta.current_state(instance)) or\
-                                    self.transitions.has_key('*')
+    return FSMMeta.current_state(instance) in self.transitions or\
+        '*' in self.transitions
 
   def conditions_met(self, instance, *args, **kwargs):
     current_state = FSMMeta.current_state(instance)
-    next_state = self.transitions.has_key(current_state) and\
+    next_state = current_state in self.transitions and\
         self.transitions[current_state] or self.transitions['*']
     return all(map(lambda f: f(instance, *args, **kwargs),
                self.conditions[next_state]))
